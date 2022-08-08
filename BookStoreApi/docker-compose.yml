@@ -1,0 +1,32 @@
+# Please refer https://aka.ms/HTTPSinContainer on how to setup an https developer certificate for your ASP .NET Core service.
+
+version: '3.4'
+
+services:
+  #frontend:
+  api:
+    build: .
+    ports: 
+      - 5144:5144
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - BookStoreDatabase__ConnectionString=mongodb://database/bookstore
+      
+  database:
+    image: mongo
+    environment:
+      - MONGO_INITDB_DATABASE=bookstore
+    ports:
+      - 27017:27017
+    volumes:
+      - bookstore:/data/db
+
+  # mongo-seed:
+  #   build: ./mongo-seed
+  #   depends_on:
+  #     - database 
+
+volumes:
+  bookstore:
+
+
