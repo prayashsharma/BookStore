@@ -3,11 +3,16 @@
 version: '3.4'
 
 services:
-  #frontend:
-  api:
-    build: .
+
+  frontend: 
+    build: ./bookstore-app
+    ports:
+      - 3000:3000
+
+  backend:
+    build: ./BookStoreApi
     ports: 
-      - 5144:5144
+      - 3001:3001
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - BookStoreDatabase__ConnectionString=mongodb://database/bookstore
