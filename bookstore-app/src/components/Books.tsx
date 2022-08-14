@@ -3,9 +3,15 @@ import { Link } from "react-router-dom";
 import BooksTable from "./BooksTable";
 import Book from "../models/book";
 import bookService from "../services/bookService";
+import ConfirmModal from "./common/ConfirmModal";
 
 function Books() {
   const [books, setBooks] = useState<Book[]>([]);
+
+  const [popup, setPopup] = useState({
+    show: false,
+    id: "",
+  });
 
   useEffect(() => {
     loadBooks();

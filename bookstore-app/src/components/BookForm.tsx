@@ -10,7 +10,6 @@ function BookForm(): JSX.Element {
   const navigate = useNavigate();
 
   const [book, setBook] = useState<Book>({
-    //Id: "",
     Name: "",
     Price: "",
     Author: "",
@@ -31,7 +30,6 @@ function BookForm(): JSX.Element {
 
   const submitForm = async (e: React.FormEvent) => {
     e.preventDefault();
-
     await bookService.saveBook(book);
     navigate("../books", { replace: true });
   };
@@ -42,7 +40,6 @@ function BookForm(): JSX.Element {
       if (bookId === "new") return;
 
       const currentBook: Book = await bookService.getBook(bookId);
-      console.log(currentBook);
       setBook(currentBook);
     } catch (ex: any) {
       if (ex.response && ex.response.status === 404) {

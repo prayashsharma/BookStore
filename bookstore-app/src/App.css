@@ -1,0 +1,5 @@
+.modal-header, .modal-body, .modal-footer {
+    background-color: black;
+    border: 0;
+    color:azure;
+}
