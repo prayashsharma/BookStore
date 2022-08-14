@@ -11,16 +11,21 @@ public class BooksController : ControllerBase
 {
     private readonly BooksService _booksService;
     private readonly CategoriesService _categoriesService;
+    private readonly ILogger<BooksController> _logger;
 
-    public BooksController(BooksService booksService, CategoriesService categoriesService)
+    public BooksController(BooksService booksService, CategoriesService categoriesService, ILogger<BooksController> logger)
     {
         _booksService = booksService;
         _categoriesService = categoriesService;
+        _logger = logger;
     }
 
     [HttpGet]
-    public async Task<List<Book>> Get() =>
-        await _booksService.GetAsync();
+    public async Task<List<Book>> Get()
+    {
+        return await _booksService.GetAsync();
+    }
+
 
     [HttpGet("{id:length(24)}")]
     public async Task<ActionResult<Book>> Get(string id)
@@ -28,9 +33,7 @@ public class BooksController : ControllerBase
         var book = await _booksService.GetAsync(id);
 
         if (book is null)
-        {
             return NotFound();
-        }
 
         return book;
     }
@@ -46,7 +49,7 @@ public class BooksController : ControllerBase
             return BadRequest();
 
         if (category?.CategoryName != null)
-            newBook.Category.CategoryName =  category.CategoryName;
+            newBook.Category.CategoryName = category.CategoryName;
 
         await _booksService.CreateAsync(newBook);
 
@@ -62,11 +65,12 @@ public class BooksController : ControllerBase
             return NotFound();
 
         (bool isCategoryValid, Category? category) = await IsCategoryValid(updatedBook.Category);
-        if (isCategoryValid)
+
+        if (!isCategoryValid)
             return BadRequest();
 
         if (category?.CategoryName != null)
-            updatedBook.Category.CategoryName =  category.CategoryName;
+            updatedBook.Category.CategoryName = category.CategoryName;
 
         updatedBook.Id = book.Id;
 
@@ -96,8 +100,9 @@ public class BooksController : ControllerBase
             return (false, null);
 
         var validCategory = await this._categoriesService.GetAsync(category.Id);
-        if ( validCategory == null)
-            return (false, null);;
+
+        if (validCategory == null)
+            return (false, null); ;
 
         return (true, validCategory);
     }

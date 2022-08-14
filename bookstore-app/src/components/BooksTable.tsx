@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import Book from "../models/book";
 
 interface BooksTableProps {
@@ -7,6 +8,7 @@ interface BooksTableProps {
 }
 
 function BooksTable({ items, onRemoveBook }: BooksTableProps) {
+  const navigate = useNavigate();
   return (
     <table className="table">
       <thead>
@@ -27,14 +29,14 @@ function BooksTable({ items, onRemoveBook }: BooksTableProps) {
             <td>{item.Category.Name}</td>
             <td>
               <button
-                onClick={() => onRemoveBook(item.Id)}
-                className="btn btn-outline-danger mx-2 "
+                onClick={() => navigate("/books/" + item.Id)}
+                className="btn btn-outline-primary mx-2"
               >
                 Edit
               </button>
               <button
                 onClick={() => onRemoveBook(item.Id)}
-                className="btn btn-outline-danger mx-2 "
+                className="btn btn-outline-danger mx-2"
               >
                 Delete
               </button>

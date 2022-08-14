@@ -4,7 +4,6 @@ import Book from "../models/book";
 import Category from "../models/category";
 import categoryService from "../services/categoryService";
 import bookService from "../services/bookService";
-import { ExecException } from "child_process";
 
 function BookForm(): JSX.Element {
   const params = useParams();
@@ -33,7 +32,7 @@ function BookForm(): JSX.Element {
   const submitForm = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    await bookService.addBook(book);
+    await bookService.saveBook(book);
     navigate("../books", { replace: true });
   };
 
