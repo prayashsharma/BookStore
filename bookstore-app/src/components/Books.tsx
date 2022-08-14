@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { Link, Outlet } from "react-router-dom";
+import { Link } from "react-router-dom";
+import BooksTable from "./BooksTable";
 import Book from "../models/book";
 import bookService from "../services/bookService";
-import BooksTable from "./BooksTable";
 
 function Books() {
   const [books, setBooks] = useState<Book[]>([]);

@@ -30,6 +30,12 @@ function BooksTable({ items, onRemoveBook }: BooksTableProps) {
                 onClick={() => onRemoveBook(item.Id)}
                 className="btn btn-outline-danger mx-2 "
               >
+                Edit
+              </button>
+              <button
+                onClick={() => onRemoveBook(item.Id)}
+                className="btn btn-outline-danger mx-2 "
+              >
                 Delete
               </button>
             </td>
