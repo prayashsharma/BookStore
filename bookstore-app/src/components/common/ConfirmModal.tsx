@@ -38,7 +38,7 @@ function ConfirmModal({
               className="btn btn-primary"
               onClick={() => onConfirm(id)}
             >
-              Confirm
+              Yes, Submit
             </button>
           </div>
         </div>

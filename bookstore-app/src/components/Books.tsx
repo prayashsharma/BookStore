@@ -22,7 +22,7 @@ function Books() {
     setBooks(books);
   };
 
-  const removeBook = (id?: string) => {
+  const handleRemoveBook = (id?: string) => {
     setBooks(books.filter((book) => book.Id !== id));
     bookService.removeBook(id);
   };
@@ -37,7 +37,7 @@ function Books() {
       >
         New Book
       </Link>
-      <BooksTable items={books} onRemoveBook={removeBook} />
+      <BooksTable items={books} onRemoveBook={handleRemoveBook} />
     </React.Fragment>
   );
 }

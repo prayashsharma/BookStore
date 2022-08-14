@@ -81,7 +81,7 @@ function BooksTable({ items, onRemoveBook }: BooksTableProps) {
       {deleteConfirmation.show && (
         <ConfirmModal
           id={deleteConfirmation.entityId!}
-          title={"Confirm Delete?"}
+          title={"Confirm Delete"}
           bodyMessage={"Are you sure you want to delete this book?"}
           onConfirm={handleConfirm}
           onConfirmCancel={handleConfirmCancel}
