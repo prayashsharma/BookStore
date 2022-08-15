@@ -4,6 +4,8 @@ import Book from "../models/book";
 import Category from "../models/category";
 import categoryService from "../services/categoryService";
 import bookService from "../services/bookService";
+import bookFormSchema from "../validation/bookFormSchema";
+import FormValidationError from "../models/formValidationError";
 
 function BookForm(): JSX.Element {
   const params = useParams();
@@ -17,6 +19,9 @@ function BookForm(): JSX.Element {
   });
 
   const [categories, setCategories] = useState<Category[]>([]);
+  const [validationErrors, setValidationErrors] = useState<FormValidationError>(
+    {}
+  );
 
   useEffect(() => {
     loadCategories();
@@ -30,6 +35,11 @@ function BookForm(): JSX.Element {
 
   const submitForm = async (e: React.FormEvent) => {
     e.preventDefault();
+    const errors = validate();
+    setValidationErrors(errors || {});
+
+    if (errors) return;
+
     await bookService.saveBook(book);
     navigate("../books", { replace: true });
   };
@@ -48,46 +58,68 @@ function BookForm(): JSX.Element {
     }
   };
 
+  const validate = () => {
+    const options = { abortEarly: false };
+    const result = bookFormSchema.validate(book, options);
+    if (!result.error) return null;
+
+    const errors: FormValidationError = {};
+    for (let item of result.error.details) {
+      errors[item.path[0]] = item.message;
+    }
+    return errors;
+  };
+
   return (
     <form onSubmit={submitForm}>
       <div className="mb-3">
-        <label htmlFor="name">Name</label>
+        <label htmlFor="Name">Name</label>
         <input
           value={book.Name}
           onChange={(e) => setBook({ ...book, Name: e.target.value })}
-          id="name"
+          // id="name"
           name="Name"
           type="text"
           className="form-control"
         />
+        {validationErrors["Name"] && (
+          <div className="alert alert-danger">{validationErrors["Name"]}</div>
+        )}
       </div>
       <div className="mb-3">
-        <label htmlFor="name">Price</label>
+        <label htmlFor="Price">Price</label>
         <input
           value={book.Price}
           onChange={(e) => setBook({ ...book, Price: e.target.value })}
-          id="price"
+          // id="price"
           name="Price"
           type="text"
           className="form-control"
         />
+        {validationErrors["Price"] && (
+          <div className="alert alert-danger">{validationErrors["Price"]}</div>
+        )}
       </div>
 
       <div className="mb-3">
-        <label htmlFor="name">Author</label>
+        <label htmlFor="Author">Author</label>
         <input
           value={book.Author}
           onChange={(e) => setBook({ ...book, Author: e.target.value })}
-          id="author"
+          //id="author"
           name="Author"
           type="text"
           className="form-control"
         />
+        {validationErrors["Author"] && (
+          <div className="alert alert-danger">{validationErrors["Author"]}</div>
+        )}
       </div>
 
       <div className="mb-3">
-        <label htmlFor="name">Category</label>
+        <label htmlFor="Category">Category</label>
         <select
+          //id="category"
           name="Category"
           value={book.Category.Id}
           className="form-control"
@@ -105,6 +137,11 @@ function BookForm(): JSX.Element {
             </option>
           ))}
         </select>
+        {validationErrors["Category"] && (
+          <div className="alert alert-danger">
+            {validationErrors["Category"]}
+          </div>
+        )}
       </div>
 
       <button type="submit" className="btn btn-primary my-3">

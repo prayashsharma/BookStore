@@ -27,6 +27,7 @@ function Books() {
     bookService.removeBook(id);
   };
 
+  const count = books.length;
   return (
     <React.Fragment>
       <Link
@@ -37,7 +38,13 @@ function Books() {
       >
         New Book
       </Link>
-      <BooksTable items={books} onRemoveBook={handleRemoveBook} />
+      {count === 0 && <p>There are no movies in the database.</p>}
+      {count > 0 && (
+        <>
+          <p>Showing {count} movies in the database.</p>
+          <BooksTable items={books} onRemoveBook={handleRemoveBook} />
+        </>
+      )}
     </React.Fragment>
   );
 }
