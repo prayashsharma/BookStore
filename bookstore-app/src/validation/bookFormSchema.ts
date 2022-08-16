@@ -6,10 +6,11 @@ const bookFormSchema = joi
     Name: joi.string().required().label("Name"),
     Price: joi.number().required().label("Price"),
     Author: joi.string().required().label("Author"),
-    Category: joi.object().keys({
-      Id: joi.string().required().label("Category"),
-    }),
+    CategoryId: joi.string().required().label("Category"),
+    // Category: joi.object().keys({
+    //   Id: joi.string().required().label("Category"),
+    // }),
   })
-  .options({ allowUnknown: true });
+  .options({ allowUnknown: true, abortEarly: false });
 
 export default bookFormSchema;

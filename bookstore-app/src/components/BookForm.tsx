@@ -5,23 +5,23 @@ import Category from "../models/category";
 import categoryService from "../services/categoryService";
 import bookService from "../services/bookService";
 import bookFormSchema from "../validation/bookFormSchema";
-import FormValidationError from "../models/formValidationError";
+import FormValidationErrorModel from "../models/formValidationErrorModel";
+import BookFormViewModel from "../models/bookFormViewModel";
 
 function BookForm(): JSX.Element {
   const params = useParams();
   const navigate = useNavigate();
 
-  const [book, setBook] = useState<Book>({
+  const [book, setBook] = useState<BookFormViewModel>({
     Name: "",
     Price: "",
     Author: "",
-    Category: { Id: "", Name: "" },
+    CategoryId: "",
   });
 
   const [categories, setCategories] = useState<Category[]>([]);
-  const [validationErrors, setValidationErrors] = useState<FormValidationError>(
-    {}
-  );
+  const [validationErrors, setValidationErrors] =
+    useState<FormValidationErrorModel>({});
 
   useEffect(() => {
     loadCategories();
@@ -35,12 +35,10 @@ function BookForm(): JSX.Element {
 
   const submitForm = async (e: React.FormEvent) => {
     e.preventDefault();
-    const errors = validate();
+    const errors = validateForm();
     setValidationErrors(errors || {});
-
     if (errors) return;
-
-    await bookService.saveBook(book);
+    await bookService.saveBook(mapToBook(book));
     navigate("../books", { replace: true });
   };
 
@@ -48,9 +46,8 @@ function BookForm(): JSX.Element {
     try {
       const bookId = params.id!;
       if (bookId === "new") return;
-
       const currentBook: Book = await bookService.getBook(bookId);
-      setBook(currentBook);
+      setBook(mapToBookFormViewModel(currentBook));
     } catch (ex: any) {
       if (ex.response && ex.response.status === 404) {
         navigate("../notFound", { replace: true });
@@ -58,16 +55,52 @@ function BookForm(): JSX.Element {
     }
   };
 
-  const validate = () => {
+  const validateForm = () => {
     const options = { abortEarly: false };
     const result = bookFormSchema.validate(book, options);
     if (!result.error) return null;
-
-    const errors: FormValidationError = {};
+    const errors: FormValidationErrorModel = {};
     for (let item of result.error.details) {
       errors[item.path[0]] = item.message;
     }
+    console.log(errors);
     return errors;
+  };
+
+  const validateProperty = (name: string, value: any) => {
+    const inputSchema = bookFormSchema.extract(name);
+    const result = inputSchema.validate(value);
+    if (!result.error) return null;
+    return result.error.message;
+  };
+
+  const handleChange = (name: string, value: any) => {
+    const errors = { ...validationErrors };
+    const errorMessage = validateProperty(name, value);
+    if (errorMessage) errors[name] = errorMessage;
+    else delete errors[name];
+    setValidationErrors(errors);
+    setBook({ ...book, [name]: value });
+  };
+
+  const mapToBookFormViewModel = (book: Book): BookFormViewModel => {
+    return {
+      Id: book.Id,
+      Name: book.Name,
+      Price: book.Price,
+      Author: book.Author,
+      CategoryId: book.Category.Id,
+    };
+  };
+
+  const mapToBook = (bookViewModel: BookFormViewModel): Book => {
+    return {
+      Id: bookViewModel.Id,
+      Name: bookViewModel.Name,
+      Price: bookViewModel.Price,
+      Author: bookViewModel.Author,
+      Category: { Id: bookViewModel.CategoryId, Name: "" },
+    };
   };
 
   return (
@@ -76,28 +109,32 @@ function BookForm(): JSX.Element {
         <label htmlFor="Name">Name</label>
         <input
           value={book.Name}
-          onChange={(e) => setBook({ ...book, Name: e.target.value })}
-          // id="name"
+          onChange={(e) => handleChange("Name", e.target.value)}
+          //setBook({ ...book, Name: e.target.value })}
           name="Name"
           type="text"
           className="form-control"
         />
         {validationErrors["Name"] && (
-          <div className="alert alert-danger">{validationErrors["Name"]}</div>
+          <div className="validation-errors form-text">
+            {validationErrors["Name"]}
+          </div>
         )}
       </div>
       <div className="mb-3">
         <label htmlFor="Price">Price</label>
         <input
           value={book.Price}
-          onChange={(e) => setBook({ ...book, Price: e.target.value })}
-          // id="price"
+          onChange={(e) => handleChange("Price", e.target.value)}
+          //setBook({ ...book, Price: e.target.value })}
           name="Price"
           type="text"
           className="form-control"
         />
         {validationErrors["Price"] && (
-          <div className="alert alert-danger">{validationErrors["Price"]}</div>
+          <div className="validation-errors form-text">
+            {validationErrors["Price"]}
+          </div>
         )}
       </div>
 
@@ -105,30 +142,31 @@ function BookForm(): JSX.Element {
         <label htmlFor="Author">Author</label>
         <input
           value={book.Author}
-          onChange={(e) => setBook({ ...book, Author: e.target.value })}
-          //id="author"
+          onChange={(e) => handleChange("Author", e.target.value)}
+          //setBook({ ...book, Author: e.target.value })}
           name="Author"
           type="text"
           className="form-control"
         />
         {validationErrors["Author"] && (
-          <div className="alert alert-danger">{validationErrors["Author"]}</div>
+          <div className="validation-errors form-text">
+            {validationErrors["Author"]}
+          </div>
         )}
       </div>
 
       <div className="mb-3">
         <label htmlFor="Category">Category</label>
         <select
-          //id="category"
           name="Category"
-          value={book.Category.Id}
+          value={book.CategoryId}
           className="form-control"
-          onChange={(e) =>
-            setBook({
-              ...book,
-              Category: { Id: e.target.value, Name: "" },
-            })
-          }
+          onChange={(e) => handleChange("CategoryId", e.target.value)}
+          // setBook({
+          //   ...book,
+          //   Category: { Id: e.target.value, Name: "" },
+          // })
+          // }
         >
           <option value="" />
           {categories.map((category) => (
@@ -138,7 +176,7 @@ function BookForm(): JSX.Element {
           ))}
         </select>
         {validationErrors["Category"] && (
-          <div className="alert alert-danger">
+          <div className="validation-errors form-text">
             {validationErrors["Category"]}
           </div>
         )}

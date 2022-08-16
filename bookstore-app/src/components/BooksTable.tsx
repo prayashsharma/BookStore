@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Book from "../models/book";
-import DeleteConfirmationModel from "../models/deleteConfirmation";
+import DeleteConfirmationModel from "../models/deleteConfirmationModel";
 import ConfirmModal from "./common/ConfirmModal";
 
 interface BooksTableProps {

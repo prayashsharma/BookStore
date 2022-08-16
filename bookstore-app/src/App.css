@@ -3,3 +3,7 @@
     border: 0;
     color:azure;
 }
+
+.validation-errors {
+    color: rgb(164, 5, 5);
+}
