@@ -14,7 +14,7 @@ function App() {
     <React.Fragment>
       <ToastContainer />
       <NavBar />
-      <main className="container my-3">
+      <main className="container my-5">
         <Routes>
           <Route path="/" element={<Navigate to="/books" />} />
           <Route path="books" element={<Books />} />

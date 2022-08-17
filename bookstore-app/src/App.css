@@ -7,3 +7,8 @@
 .validation-errors {
     color: rgb(164, 5, 5);
 }
+
+.clickable {
+    cursor: pointer;
+  }
+  
