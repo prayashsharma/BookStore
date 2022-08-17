@@ -75,6 +75,7 @@ function BookForm(): JSX.Element {
   };
 
   const handleChange = (name: string, value: any) => {
+    //const { name, value } = event.target;
     const errors = { ...validationErrors };
     const errorMessage = validateProperty(name, value);
     if (errorMessage) errors[name] = errorMessage;
@@ -109,9 +110,9 @@ function BookForm(): JSX.Element {
         <label htmlFor="Name">Name</label>
         <input
           value={book.Name}
-          onChange={(e) => handleChange("Name", e.target.value)}
-          //setBook({ ...book, Name: e.target.value })}
+          onChange={(e) => handleChange(e.target.name, e.target.value)}
           name="Name"
+          id="Name"
           type="text"
           className="form-control"
         />
@@ -125,9 +126,9 @@ function BookForm(): JSX.Element {
         <label htmlFor="Price">Price</label>
         <input
           value={book.Price}
-          onChange={(e) => handleChange("Price", e.target.value)}
-          //setBook({ ...book, Price: e.target.value })}
+          onChange={(e) => handleChange(e.target.name, e.target.value)}
           name="Price"
+          id="Price"
           type="text"
           className="form-control"
         />
@@ -142,9 +143,9 @@ function BookForm(): JSX.Element {
         <label htmlFor="Author">Author</label>
         <input
           value={book.Author}
-          onChange={(e) => handleChange("Author", e.target.value)}
-          //setBook({ ...book, Author: e.target.value })}
+          onChange={(e) => handleChange(e.target.name, e.target.value)}
           name="Author"
+          id="Author"
           type="text"
           className="form-control"
         />
@@ -156,17 +157,13 @@ function BookForm(): JSX.Element {
       </div>
 
       <div className="mb-3">
-        <label htmlFor="Category">Category</label>
+        <label htmlFor="CategoryId">Category</label>
         <select
-          name="Category"
+          id="CategoryId"
+          name="CategoryId"
           value={book.CategoryId}
           className="form-control"
-          onChange={(e) => handleChange("CategoryId", e.target.value)}
-          // setBook({
-          //   ...book,
-          //   Category: { Id: e.target.value, Name: "" },
-          // })
-          // }
+          onChange={(e) => handleChange(e.target.name, e.target.value)}
         >
           <option value="" />
           {categories.map((category) => (
@@ -175,9 +172,9 @@ function BookForm(): JSX.Element {
             </option>
           ))}
         </select>
-        {validationErrors["Category"] && (
+        {validationErrors["CategoryId"] && (
           <div className="validation-errors form-text">
-            {validationErrors["Category"]}
+            {validationErrors["CategoryId"]}
           </div>
         )}
       </div>

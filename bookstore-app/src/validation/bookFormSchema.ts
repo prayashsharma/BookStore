@@ -7,9 +7,6 @@ const bookFormSchema = joi
     Price: joi.number().required().label("Price"),
     Author: joi.string().required().label("Author"),
     CategoryId: joi.string().required().label("Category"),
-    // Category: joi.object().keys({
-    //   Id: joi.string().required().label("Category"),
-    // }),
   })
   .options({ allowUnknown: true, abortEarly: false });
 
