@@ -5,6 +5,8 @@ import Book from "../models/book";
 import Category from "../models/category";
 import bookService from "../services/bookService";
 import categoryService from "../services/categoryService";
+import { paginate } from "../utils/paginate";
+import Pagination from "./common/Pagination";
 
 function Books() {
   const [books, setBooks] = useState<Book[]>([]);
@@ -13,6 +15,8 @@ function Books() {
     null
   );
   const [searchQuery, setSearchQuery] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(4);
 
   useEffect(() => {
     loadBooks();
@@ -39,6 +43,10 @@ function Books() {
     setSearchQuery("");
   };
 
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+  };
+
   const getPagedData = () => {
     let filteredBooks = books;
     if (searchQuery)
@@ -50,7 +58,9 @@ function Books() {
         (b) => b.Category.Id === selectedCategory.Id
       );
 
-    return { totalCount: filteredBooks.length, filteredBooks: filteredBooks };
+    const paginatedmovies = paginate(filteredBooks, currentPage, pageSize);
+
+    return { totalCount: filteredBooks.length, filteredBooks: paginatedmovies };
   };
 
   const { totalCount, filteredBooks } = getPagedData();
@@ -83,11 +93,17 @@ function Books() {
         >
           New Book
         </Link>
-        {totalCount === 0 && <p>There are no movies in the database.</p>}
+        {totalCount === 0 && <p>There are no books in the database.</p>}
         {totalCount > 0 && (
           <>
-            <p>Showing {totalCount} movies in the database.</p>
+            <p>Showing {totalCount} books in the database.</p>
             <BooksTable items={filteredBooks} onRemoveBook={handleRemoveBook} />
+            <Pagination
+              itemsCount={totalCount}
+              pageSize={pageSize}
+              currentPage={currentPage}
+              onPageChange={handlePageChange}
+            />
           </>
         )}
       </div>
