@@ -1,14 +1,17 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import BooksTable from "./BooksTable";
+import Pagination from "./common/Pagination";
+import SearchBox from "./common/SearchBox";
 import Book from "../models/book";
 import Category from "../models/category";
 import bookService from "../services/bookService";
 import categoryService from "../services/categoryService";
 import { paginate } from "../utils/paginate";
-import Pagination from "./common/Pagination";
 
 function Books() {
+  const pageSize = 5;
+
   const [books, setBooks] = useState<Book[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<Category | null>(
@@ -16,7 +19,6 @@ function Books() {
   );
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const [pageSize, setPageSize] = useState(4);
 
   useEffect(() => {
     loadBooks();
@@ -47,11 +49,17 @@ function Books() {
     setCurrentPage(page);
   };
 
+  const handleSearch = (value: any) => {
+    setSearchQuery(value);
+  };
+
   const getPagedData = () => {
     let filteredBooks = books;
     if (searchQuery)
-      filteredBooks = books.filter((b) =>
-        b.Name.toLowerCase().startsWith(searchQuery.toLowerCase())
+      filteredBooks = books.filter(
+        (b) =>
+          b.Name.toLowerCase().startsWith(searchQuery.toLowerCase()) ||
+          b.Author.toLowerCase().includes(searchQuery.toLowerCase())
       );
     else if (selectedCategory && selectedCategory.Id)
       filteredBooks = books.filter(
@@ -62,7 +70,6 @@ function Books() {
 
     return { totalCount: filteredBooks.length, filteredBooks: paginatedmovies };
   };
-
   const { totalCount, filteredBooks } = getPagedData();
 
   return (
@@ -93,10 +100,12 @@ function Books() {
         >
           New Book
         </Link>
+
         {totalCount === 0 && <p>There are no books in the database.</p>}
+        {totalCount > 0 && <p>Showing {totalCount} books in the database.</p>}
+        <SearchBox value={searchQuery} onChange={handleSearch} />
         {totalCount > 0 && (
           <>
-            <p>Showing {totalCount} books in the database.</p>
             <BooksTable items={filteredBooks} onRemoveBook={handleRemoveBook} />
             <Pagination
               itemsCount={totalCount}
