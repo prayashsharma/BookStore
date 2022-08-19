@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import BooksTable from "./BooksTable";
 import Pagination from "./common/Pagination";
@@ -45,6 +45,12 @@ function Books() {
     setSearchQuery("");
   };
 
+  const handleCategoryClear = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setSelectedCategory(null);
+    setSearchQuery("");
+  };
+
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
   };
@@ -70,6 +76,7 @@ function Books() {
 
     return { totalCount: filteredBooks.length, filteredBooks: paginatedmovies };
   };
+
   const { totalCount, filteredBooks } = getPagedData();
 
   return (
@@ -87,11 +94,20 @@ function Books() {
               }
             >
               {item.Name}
+              {item === selectedCategory && (
+                <span
+                  onClick={(e) => handleCategoryClear(e)}
+                  className="badge rounded-pill text-bg-danger"
+                  style={{ float: "right" }}
+                >
+                  x
+                </span>
+              )}
             </li>
           ))}
         </ul>
       </div>
-      <div className="col">
+      <div className="col mx-4">
         <Link
           to="new"
           state={{ from: "books" }}
