@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import _ from "lodash";
 import BooksTable from "./BooksTable";
 import Pagination from "./common/Pagination";
 import SearchBox from "./common/SearchBox";
 import Book from "../models/book";
 import Category from "../models/category";
+import SortColumnModel from "../models/sortColumnModel";
 import bookService from "../services/bookService";
 import categoryService from "../services/categoryService";
 import { paginate } from "../utils/paginate";
@@ -18,6 +20,11 @@ function Books() {
     null
   );
   const [searchQuery, setSearchQuery] = useState("");
+  const [sortColumn, setSortColumn] = useState<SortColumnModel>({
+    Column: "Name",
+    Order: "asc",
+  });
+
   const [currentPage, setCurrentPage] = useState(1);
 
   useEffect(() => {
@@ -43,12 +50,14 @@ function Books() {
   const handleCategorySelect = (category: Category | null) => {
     setSelectedCategory(category);
     setSearchQuery("");
+    setCurrentPage(1);
   };
 
   const handleCategoryClear = (e: React.MouseEvent) => {
     e.stopPropagation();
     setSelectedCategory(null);
     setSearchQuery("");
+    setCurrentPage(1);
   };
 
   const handlePageChange = (page: number) => {
@@ -57,6 +66,14 @@ function Books() {
 
   const handleSearch = (value: any) => {
     setSearchQuery(value);
+  };
+
+  const handleSort = (sortColumnModel: SortColumnModel) => {
+    setSortColumn({
+      ...sortColumn,
+      Column: sortColumnModel.Column,
+      Order: sortColumnModel.Order,
+    });
   };
 
   const getPagedData = () => {
@@ -72,7 +89,13 @@ function Books() {
         (b) => b.Category.Id === selectedCategory.Id
       );
 
-    const paginatedmovies = paginate(filteredBooks, currentPage, pageSize);
+    const sortedBooks = _.orderBy(
+      filteredBooks,
+      [sortColumn.Column],
+      [sortColumn.Order]
+    );
+
+    const paginatedmovies = paginate(sortedBooks, currentPage, pageSize);
 
     return { totalCount: filteredBooks.length, filteredBooks: paginatedmovies };
   };
@@ -122,7 +145,12 @@ function Books() {
         <SearchBox value={searchQuery} onChange={handleSearch} />
         {totalCount > 0 && (
           <>
-            <BooksTable items={filteredBooks} onRemoveBook={handleRemoveBook} />
+            <BooksTable
+              items={filteredBooks}
+              sortColumn={sortColumn}
+              onRemoveBook={handleRemoveBook}
+              onSortTable={handleSort}
+            />
             <Pagination
               itemsCount={totalCount}
               pageSize={pageSize}

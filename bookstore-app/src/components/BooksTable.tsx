@@ -2,14 +2,23 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Book from "../models/book";
 import DeleteConfirmationModel from "../models/deleteConfirmationModel";
+import SortColumnModel from "../models/sortColumnModel";
 import ConfirmModal from "./common/ConfirmModal";
+import SortIcon from "./common/SortIcon";
 
 interface BooksTableProps {
   items: Book[];
+  sortColumn: SortColumnModel;
   onRemoveBook: (id?: string) => void;
+  onSortTable: (sortColumn: SortColumnModel) => void;
 }
 
-function BooksTable({ items, onRemoveBook }: BooksTableProps) {
+function BooksTable({
+  items,
+  sortColumn,
+  onRemoveBook,
+  onSortTable,
+}: BooksTableProps) {
   const [deleteConfirmation, setDeleteConfirmation] =
     useState<DeleteConfirmationModel>({
       show: false,
@@ -40,15 +49,34 @@ function BooksTable({ items, onRemoveBook }: BooksTableProps) {
     });
   };
 
+  const handleSortTable = (column: string) => {
+    if (sortColumn.Column === column)
+      sortColumn.Order = sortColumn.Order === "asc" ? "desc" : "asc";
+    else {
+      sortColumn.Column = column;
+      sortColumn.Order = "asc";
+    }
+    onSortTable(sortColumn);
+  };
+
   const navigate = useNavigate();
   return (
     <React.Fragment>
       <table className="table">
         <thead>
           <tr>
-            <th>Name</th>
-            <th>Price</th>
-            <th>Author</th>
+            <th className="clickable" onClick={() => handleSortTable("Name")}>
+              Name
+              <SortIcon column={"Name"} currentSortColumnModel={sortColumn} />
+            </th>
+            <th className="clickable" onClick={() => handleSortTable("Price")}>
+              Price
+              <SortIcon column={"Price"} currentSortColumnModel={sortColumn} />
+            </th>
+            <th className="clickable" onClick={() => handleSortTable("Author")}>
+              Author
+              <SortIcon column={"Author"} currentSortColumnModel={sortColumn} />
+            </th>
             <th>Category</th>
             <th></th>
           </tr>
