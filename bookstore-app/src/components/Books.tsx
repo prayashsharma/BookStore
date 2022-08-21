@@ -105,7 +105,12 @@ function Books() {
   return (
     <div className="row">
       <div className="col-3">
-        <span className="badge text-bg-secondary mx-1 my-1">Filter by:</span>
+        {categories.length > 0 && (
+          <span className="badge text-bg-secondary mx-1 my-1">Filter by:</span>
+        )}
+        {categories.length === 0 && (
+          <p>There are no categories in the database.</p>
+        )}
         <ul className="list-group">
           {categories.map((item) => (
             <li
@@ -143,7 +148,9 @@ function Books() {
 
         {totalCount === 0 && <p>There are no books in the database.</p>}
         {totalCount > 0 && <p>Showing {totalCount} books in the database.</p>}
-        <SearchBox value={searchQuery} onChange={handleSearch} />
+        {totalCount > 0 && (
+          <SearchBox value={searchQuery} onChange={handleSearch} />
+        )}
         {totalCount > 0 && (
           <>
             <BooksTable

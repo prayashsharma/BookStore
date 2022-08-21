@@ -27,10 +27,10 @@ services:
     volumes:
       - bookstore:/data/db
 
-  # mongo-seed:
-  #   build: ./mongo-seed
-  #   depends_on:
-  #     - database 
+  mongo-seed:
+    build: ./mongo-seed
+    depends_on:
+      - database 
 
   dozzle:
     container_name: api_dozzle
