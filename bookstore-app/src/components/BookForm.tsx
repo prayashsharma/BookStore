@@ -182,6 +182,14 @@ function BookForm(): JSX.Element {
       <button type="submit" className="btn btn-primary my-3">
         Submit
       </button>
+
+      <button
+        type="button"
+        className="btn btn-secondary mx-2"
+        onClick={() => navigate("../books", { replace: true })}
+      >
+        Cancel
+      </button>
     </form>
   );
 }
