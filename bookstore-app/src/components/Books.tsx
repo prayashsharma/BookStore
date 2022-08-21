@@ -105,6 +105,7 @@ function Books() {
   return (
     <div className="row">
       <div className="col-3">
+        <span className="badge text-bg-secondary mx-1 my-1">Filter by:</span>
         <ul className="list-group">
           {categories.map((item) => (
             <li
