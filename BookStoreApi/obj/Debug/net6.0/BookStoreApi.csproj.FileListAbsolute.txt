@@ -41,3 +41,8 @@
 /Users/prayash/Code/BookStore/BookStoreApi/obj/Debug/net6.0/BookStoreApi.pdb
 /Users/prayash/Code/BookStore/BookStoreApi/obj/Debug/net6.0/BookStoreApi.genruntimeconfig.cache
 /Users/prayash/Code/BookStore/BookStoreApi/obj/Debug/net6.0/ref/BookStoreApi.dll
+/Users/prayash/Code/BookStore/BookStoreApi/bin/Debug/net6.0/Microsoft.IdentityModel.Abstractions.dll
+/Users/prayash/Code/BookStore/BookStoreApi/bin/Debug/net6.0/Microsoft.IdentityModel.JsonWebTokens.dll
+/Users/prayash/Code/BookStore/BookStoreApi/bin/Debug/net6.0/Microsoft.IdentityModel.Logging.dll
+/Users/prayash/Code/BookStore/BookStoreApi/bin/Debug/net6.0/Microsoft.IdentityModel.Tokens.dll
+/Users/prayash/Code/BookStore/BookStoreApi/bin/Debug/net6.0/System.IdentityModel.Tokens.Jwt.dll

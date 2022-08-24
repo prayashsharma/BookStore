@@ -1,6 +1,7 @@
 
-using BookStoreApi.Models;
+using BookStoreApi.Entities;
 using BookStoreApi.Services;
+using BookStoreApi.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BookStoreApi.Controllers;
@@ -9,19 +10,19 @@ namespace BookStoreApi.Controllers;
 [Route("api/[controller]")]
 public class CategoriesController : ControllerBase
 {
-    private readonly CategoriesService _categoriesService;
+    private readonly ICategoryService _categoryService;
 
-    public CategoriesController(CategoriesService categoriesService) =>
-        _categoriesService = categoriesService;
+    public CategoriesController(ICategoryService categoryService) =>
+        _categoryService = categoryService;
 
     [HttpGet]
     public async Task<List<Category>> Get() =>
-        await _categoriesService.GetAsync();
+        await _categoryService.GetAsync();
 
     [HttpGet("{id:length(24)}")]
     public async Task<ActionResult<Category>> Get(string id)
     {
-        var book = await _categoriesService.GetAsync(id);
+        var book = await _categoryService.GetAsync(id);
 
         if (book is null)
         {
@@ -34,7 +35,7 @@ public class CategoriesController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> Post(Category newCategory)
     {
-        await _categoriesService.CreateAsync(newCategory);
+        await _categoryService.CreateAsync(newCategory);
 
         return CreatedAtAction(nameof(Get), new { id = newCategory.Id }, newCategory);
     }
@@ -42,7 +43,7 @@ public class CategoriesController : ControllerBase
     [HttpPut("{id:length(24)}")]
     public async Task<IActionResult> Update(string id, Category updatedCategory)
     {
-        var book = await _categoriesService.GetAsync(id);
+        var book = await _categoryService.GetAsync(id);
 
         if (book is null)
         {
@@ -51,7 +52,7 @@ public class CategoriesController : ControllerBase
 
         updatedCategory.Id = book.Id;
 
-        await _categoriesService.UpdateAsync(id, updatedCategory);
+        await _categoryService.UpdateAsync(id, updatedCategory);
 
         return NoContent();
     }
@@ -59,14 +60,14 @@ public class CategoriesController : ControllerBase
     [HttpDelete("{id:length(24)}")]
     public async Task<IActionResult> Delete(string id)
     {
-        var book = await _categoriesService.GetAsync(id);
+        var book = await _categoryService.GetAsync(id);
 
         if (book is null)
         {
             return NotFound();
         }
 
-        await _categoriesService.RemoveAsync(id);
+        await _categoryService.RemoveAsync(id);
 
         return NoContent();
     }

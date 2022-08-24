@@ -1,13 +1,14 @@
-using BookStoreApi.Models;
+using BookStoreApi.Entities;
 using BookStoreApi.Services;
+using BookStoreApi.Services.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.Configure<BookStoreDatabaseSettings>(
     builder.Configuration.GetSection("BookStoreDatabase"));
 
-builder.Services.AddSingleton<BooksService>();
-builder.Services.AddSingleton<CategoriesService>();
+builder.Services.AddTransient<IBookService, BookService>();
+builder.Services.AddTransient<ICategoryService, CategoryService>();
 
 builder.Services.AddControllers()
                 .AddJsonOptions(

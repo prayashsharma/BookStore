@@ -2,9 +2,9 @@ using System.Text.Json.Serialization;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 
-namespace BookStoreApi.Models;
+namespace BookStoreApi.Entities;
 
-public class Category
+public class Book
 {
     [BsonId]
     [BsonRepresentation(BsonType.ObjectId)]
@@ -12,7 +12,11 @@ public class Category
 
     [BsonElement("Name")]
     [JsonPropertyName("Name")]
-    public string CategoryName { get; set; } = null!;
+    public string BookName { get; set; } = null!;
 
-    
+    public decimal Price { get; set; }
+
+    public string Author { get; set; } = null!;
+
+    public Category Category { get; set; } = null!;
 }

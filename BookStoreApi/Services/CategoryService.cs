@@ -1,14 +1,15 @@
-using BookStoreApi.Models;
+using BookStoreApi.Entities;
+using BookStoreApi.Services.Interfaces;
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
 
 namespace BookStoreApi.Services;
 
-public class CategoriesService
+public class CategoryService : ICategoryService
 {
     private readonly IMongoCollection<Category> _categoriesCollection;
 
-    public CategoriesService(
+    public CategoryService(
         IOptions<BookStoreDatabaseSettings> bookStoreDatabaseSettings)
     {
         var mongoClient = new MongoClient(

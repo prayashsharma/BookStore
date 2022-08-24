@@ -1,6 +1,7 @@
 
-using BookStoreApi.Models;
+using BookStoreApi.Entities;
 using BookStoreApi.Services;
+using BookStoreApi.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BookStoreApi.Controllers;
@@ -9,28 +10,28 @@ namespace BookStoreApi.Controllers;
 [Route("api/[controller]")]
 public class BooksController : ControllerBase
 {
-    private readonly BooksService _booksService;
-    private readonly CategoriesService _categoriesService;
+    private readonly IBookService _bookService;
+    private readonly ICategoryService _categoryService;
     private readonly ILogger<BooksController> _logger;
 
-    public BooksController(BooksService booksService, CategoriesService categoriesService, ILogger<BooksController> logger)
+    public BooksController(IBookService booksService, ICategoryService categoryService, ILogger<BooksController> logger)
     {
-        _booksService = booksService;
-        _categoriesService = categoriesService;
+        _bookService = booksService;
+        _categoryService = categoryService;
         _logger = logger;
     }
 
     [HttpGet]
     public async Task<List<Book>> Get()
     {
-        return await _booksService.GetAsync();
+        return await _bookService.GetAsync();
     }
 
 
     [HttpGet("{id:length(24)}")]
     public async Task<ActionResult<Book>> Get(string id)
     {
-        var book = await _booksService.GetAsync(id);
+        var book = await _bookService.GetAsync(id);
 
         if (book is null)
             return NotFound();
@@ -51,7 +52,7 @@ public class BooksController : ControllerBase
         if (category?.CategoryName != null)
             newBook.Category.CategoryName = category.CategoryName;
 
-        await _booksService.CreateAsync(newBook);
+        await _bookService.CreateAsync(newBook);
 
         return CreatedAtAction(nameof(Get), new { id = newBook.Id }, newBook);
     }
@@ -59,7 +60,7 @@ public class BooksController : ControllerBase
     [HttpPut("{id:length(24)}")]
     public async Task<IActionResult> Update(string id, Book updatedBook)
     {
-        var book = await _booksService.GetAsync(id);
+        var book = await _bookService.GetAsync(id);
 
         if (book is null)
             return NotFound();
@@ -74,7 +75,7 @@ public class BooksController : ControllerBase
 
         updatedBook.Id = book.Id;
 
-        await _booksService.UpdateAsync(id, updatedBook);
+        await _bookService.UpdateAsync(id, updatedBook);
 
         return NoContent();
     }
@@ -82,14 +83,14 @@ public class BooksController : ControllerBase
     [HttpDelete("{id:length(24)}")]
     public async Task<IActionResult> Delete(string id)
     {
-        var book = await _booksService.GetAsync(id);
+        var book = await _bookService.GetAsync(id);
 
         if (book is null)
         {
             return NotFound();
         }
 
-        await _booksService.RemoveAsync(id);
+        await _bookService.RemoveAsync(id);
 
         return NoContent();
     }
@@ -99,7 +100,7 @@ public class BooksController : ControllerBase
         if (category == null || category?.Id == null)
             return (false, null);
 
-        var validCategory = await this._categoriesService.GetAsync(category.Id);
+        var validCategory = await this._categoryService.GetAsync(category.Id);
 
         if (validCategory == null)
             return (false, null); ;
