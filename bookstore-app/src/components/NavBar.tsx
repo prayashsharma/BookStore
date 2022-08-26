@@ -23,8 +23,8 @@ const NavBar = () => {
           <NavLink className="nav-item nav-link" to="/books">
             Books
           </NavLink>
-          <NavLink className="nav-item nav-link" to="/customers">
-            Customers
+          <NavLink className="nav-item nav-link" to="/categories">
+            Categories
           </NavLink>
         </div>
       </div>
