@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Book from "../models/book";
-import DeleteConfirmationModel from "../models/deleteConfirmationModel";
-import SortColumnModel from "../models/sortColumnModel";
 import ConfirmModal from "./common/ConfirmModal";
 import SortIcon from "./common/SortIcon";
+import DeleteConfirmationModel from "../models/deleteConfirmationModel";
+import SortColumnModel from "../models/sortColumnModel";
 
 interface BooksTableProps {
   items: Book[];

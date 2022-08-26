@@ -14,7 +14,7 @@ class CategoryService {
 
   async saveCategory(category: Category) {
     if (category.Id) {
-      const body = { ...category };
+      // const body = { ...category };
       return await this.editCategory(category);
     }
     return await this.addCategory(category);

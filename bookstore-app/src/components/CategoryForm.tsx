@@ -14,7 +14,7 @@ function CategoryForm(): JSX.Element {
     Name: "",
   });
 
-  const [categories, setCategories] = useState<Category[]>([]);
+  // const [categories, setCategories] = useState<Category[]>([]);
   const [validationErrors, setValidationErrors] =
     useState<FormValidationErrorModel>({});
 

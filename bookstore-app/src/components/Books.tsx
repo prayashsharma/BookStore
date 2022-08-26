@@ -148,9 +148,7 @@ function Books() {
 
         {totalCount === 0 && <p>There are no books in the database.</p>}
         {totalCount > 0 && <p>Showing {totalCount} books in the database.</p>}
-        {totalCount > 0 && (
-          <SearchBox value={searchQuery} onChange={handleSearch} />
-        )}
+        <SearchBox value={searchQuery} onChange={handleSearch} />
         {totalCount > 0 && (
           <>
             <BooksTable

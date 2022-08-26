@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 import Category from "../models/category";
 import DeleteConfirmationModel from "../models/deleteConfirmationModel";
-import bookService from "../services/bookService";
 import ConfirmModal from "./common/ConfirmModal";
-import { toast } from "react-toastify";
+import bookService from "../services/bookService";
 
 interface CategoriesTableProps {
   items: Category[];
@@ -22,7 +22,7 @@ function CategoriesTable({ items, onRemoveCategory }: CategoriesTableProps) {
     const books = await bookService.getBooks();
     const filteredBook = books.filter((book) => book.Category.Id === id);
     if (filteredBook.length !== 0) {
-      toast.warning("Cannot delete a category that contain books.");
+      toast.warning("Cannot delete a category with books.");
       return;
     }
 

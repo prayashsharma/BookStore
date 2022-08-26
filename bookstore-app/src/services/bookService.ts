@@ -14,7 +14,7 @@ class BookService {
 
   async saveBook(book: Book) {
     if (book.Id) {
-      const body = { ...book };
+      // const body = { ...book };
       return await this.editBook(book);
     }
     return await this.addBook(book);

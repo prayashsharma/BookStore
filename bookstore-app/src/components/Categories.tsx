@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import CategoriesTable from "./CategoriesTable";
 import Category from "../models/category";
 import categoryService from "../services/categoryService";
-import CategoriesTable from "./CategoriesTable";
 
 function Categories() {
   const [categories, setCategories] = useState<Category[]>([]);
