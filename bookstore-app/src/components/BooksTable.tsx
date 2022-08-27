@@ -94,8 +94,8 @@ function BooksTable({
         <tbody>
           {items.map((item) => (
             <tr key={item.Id}>
-              <td>{item.Name}</td>
-              <td>
+              <td className="align-middle">{item.Name}</td>
+              <td className="align-middle">
                 <NumberFormat
                   value={item.Price}
                   displayType={"text"}
@@ -103,9 +103,9 @@ function BooksTable({
                   prefix={"$"}
                 />
               </td>
-              <td>{item.Author}</td>
-              <td>{item.Category.Name}</td>
-              <td>
+              <td className="align-middle">{item.Author}</td>
+              <td className="align-middle">{item.Category.Name}</td>
+              <td className="align-middle">
                 <button
                   onClick={() => navigate("/books/" + item.Id)}
                   className="btn btn-outline-primary mx-2"

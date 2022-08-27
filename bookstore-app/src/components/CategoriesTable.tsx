@@ -62,8 +62,8 @@ function CategoriesTable({ items, onRemoveCategory }: CategoriesTableProps) {
         <tbody>
           {items.map((item) => (
             <tr key={item.Id}>
-              <td>{item.Name}</td>
-              <td>
+              <td className="align-middle">{item.Name}</td>
+              <td className="align-middle">
                 <button
                   onClick={() => navigate("/categories/" + item.Id)}
                   className="btn btn-outline-primary mx-2"
