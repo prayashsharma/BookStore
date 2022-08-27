@@ -22,14 +22,14 @@ public class CategoriesController : ControllerBase
     [HttpGet("{id:length(24)}")]
     public async Task<ActionResult<Category>> Get(string id)
     {
-        var book = await _categoryService.GetAsync(id);
+        var category = await _categoryService.GetAsync(id);
 
-        if (book is null)
+        if (category is null)
         {
             return NotFound();
         }
 
-        return book;
+        return category;
     }
 
     [HttpPost]
@@ -43,14 +43,14 @@ public class CategoriesController : ControllerBase
     [HttpPut("{id:length(24)}")]
     public async Task<IActionResult> Update(string id, Category updatedCategory)
     {
-        var book = await _categoryService.GetAsync(id);
+        var category = await _categoryService.GetAsync(id);
 
-        if (book is null)
+        if (category is null)
         {
             return NotFound();
         }
 
-        updatedCategory.Id = book.Id;
+        updatedCategory.Id = category.Id;
 
         await _categoryService.UpdateAsync(id, updatedCategory);
 
@@ -60,9 +60,9 @@ public class CategoriesController : ControllerBase
     [HttpDelete("{id:length(24)}")]
     public async Task<IActionResult> Delete(string id)
     {
-        var book = await _categoryService.GetAsync(id);
+        var category = await _categoryService.GetAsync(id);
 
-        if (book is null)
+        if (category is null)
         {
             return NotFound();
         }

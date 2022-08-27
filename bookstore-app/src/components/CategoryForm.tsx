@@ -14,13 +14,27 @@ function CategoryForm(): JSX.Element {
     Name: "",
   });
 
-  // const [categories, setCategories] = useState<Category[]>([]);
   const [validationErrors, setValidationErrors] =
     useState<FormValidationErrorModel>({});
 
   useEffect(() => {
+    const populateCategory = async () => {
+      try {
+        const categoryId = params.id!;
+        if (categoryId === "new") return;
+        const currentCategory: Category = await categoryService.getCategory(
+          categoryId
+        );
+        setCategory(mapToCategoryFormViewModel(currentCategory));
+      } catch (ex: any) {
+        if (ex.response && ex.response.status === 404) {
+          navigate("../notFound", { replace: true });
+        }
+      }
+    };
+
     populateCategory();
-  }, []);
+  }, [navigate, params.id]);
 
   const submitForm = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -29,21 +43,6 @@ function CategoryForm(): JSX.Element {
     if (errors) return;
     await categoryService.saveCategory(mapToCategory(category));
     navigate("../categories", { replace: true });
-  };
-
-  const populateCategory = async () => {
-    try {
-      const categoryId = params.id!;
-      if (categoryId === "new") return;
-      const currentCategory: Category = await categoryService.getCategory(
-        categoryId
-      );
-      setCategory(mapToCategoryFormViewModel(currentCategory));
-    } catch (ex: any) {
-      if (ex.response && ex.response.status === 404) {
-        navigate("../notFound", { replace: true });
-      }
-    }
   };
 
   const validateForm = () => {

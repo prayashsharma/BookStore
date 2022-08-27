@@ -28,19 +28,17 @@ function Books() {
   const [currentPage, setCurrentPage] = useState(1);
 
   useEffect(() => {
+    const loadCategories = async () => {
+      const categories = await categoryService.getCategories();
+      setCategories(categories);
+    };
+    const loadBooks = async () => {
+      const books = await bookService.getBooks();
+      setBooks(books);
+    };
     loadBooks();
     loadCategories();
-  }, []);
-
-  const loadBooks = async () => {
-    const books = await bookService.getBooks();
-    setBooks(books);
-  };
-
-  const loadCategories = async () => {
-    const categories = await categoryService.getCategories();
-    setCategories(categories);
-  };
+  }, [categories]);
 
   const handleRemoveBook = (id?: string) => {
     setBooks(books.filter((book) => book.Id !== id));

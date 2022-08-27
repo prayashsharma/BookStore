@@ -24,14 +24,27 @@ function BookForm(): JSX.Element {
     useState<FormValidationErrorModel>({});
 
   useEffect(() => {
+    const populateBook = async () => {
+      try {
+        const bookId = params.id!;
+        if (bookId === "new") return;
+        const currentBook: Book = await bookService.getBook(bookId);
+        setBook(mapToBookFormViewModel(currentBook));
+      } catch (ex: any) {
+        if (ex.response && ex.response.status === 404) {
+          navigate("../notFound", { replace: true });
+        }
+      }
+    };
+
+    const loadCategories = async () => {
+      const categories = await categoryService.getCategories();
+      setCategories(categories);
+    };
+
     loadCategories();
     populateBook();
-  }, []);
-
-  const loadCategories = async () => {
-    const categories = await categoryService.getCategories();
-    setCategories(categories);
-  };
+  }, [navigate, params.id]);
 
   const submitForm = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -40,19 +53,6 @@ function BookForm(): JSX.Element {
     if (errors) return;
     await bookService.saveBook(mapToBook(book));
     navigate("../books", { replace: true });
-  };
-
-  const populateBook = async () => {
-    try {
-      const bookId = params.id!;
-      if (bookId === "new") return;
-      const currentBook: Book = await bookService.getBook(bookId);
-      setBook(mapToBookFormViewModel(currentBook));
-    } catch (ex: any) {
-      if (ex.response && ex.response.status === 404) {
-        navigate("../notFound", { replace: true });
-      }
-    }
   };
 
   const validateForm = () => {
@@ -75,7 +75,6 @@ function BookForm(): JSX.Element {
   };
 
   const handleChange = (name: string, value: any) => {
-    //const { name, value } = event.target;
     const errors = { ...validationErrors };
     const errorMessage = validateProperty(name, value);
     if (errorMessage) errors[name] = errorMessage;
