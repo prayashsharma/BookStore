@@ -38,7 +38,7 @@ function Books() {
     };
     loadBooks();
     loadCategories();
-  }, [categories]);
+  }, []);
 
   const handleRemoveBook = (id?: string) => {
     setBooks(books.filter((book) => book.Id !== id));

@@ -77,7 +77,16 @@ function BooksTable({
               Author
               <SortIcon column={"Author"} currentSortColumnModel={sortColumn} />
             </th>
-            <th>Category</th>
+            <th
+              className="clickable"
+              onClick={() => handleSortTable("Category.Name")}
+            >
+              Category
+              <SortIcon
+                column={"Category.Name"}
+                currentSortColumnModel={sortColumn}
+              />
+            </th>
             <th></th>
           </tr>
         </thead>
