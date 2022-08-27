@@ -1,11 +1,14 @@
 [
     {
-        "Name": "Computer"
+        "Name": "Computers"
+    },
+    {
+        "Name": "Action and Adventure"
+    },
+    {
+        "Name": "Comics"
     },
     {
         "Name": "Science"
-    },
-    {
-        "Name": "Geography"
     }
   ]

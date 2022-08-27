@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import NumberFormat from "react-number-format";
 import Book from "../models/book";
 import ConfirmModal from "./common/ConfirmModal";
 import SortIcon from "./common/SortIcon";
@@ -94,7 +95,14 @@ function BooksTable({
           {items.map((item) => (
             <tr key={item.Id}>
               <td>{item.Name}</td>
-              <td>{item.Price}</td>
+              <td>
+                <NumberFormat
+                  value={item.Price}
+                  displayType={"text"}
+                  thousandSeparator={true}
+                  prefix={"$"}
+                />
+              </td>
               <td>{item.Author}</td>
               <td>{item.Category.Name}</td>
               <td>
