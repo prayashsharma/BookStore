@@ -122,13 +122,14 @@ function Books() {
             >
               {item.Name}
               {item === selectedCategory && (
-                <span
+                <button
+                  type="button"
                   onClick={(e) => handleCategoryClear(e)}
-                  className="badge rounded-pill text-bg-danger"
+                  className="btn btn-danger btn-circle"
                   style={{ float: "right" }}
                 >
-                  x
-                </span>
+                  <i className="bi bi-x-lg"></i>
+                </button>
               )}
             </li>
           ))}
