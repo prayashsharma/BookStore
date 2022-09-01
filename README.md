@@ -18,3 +18,5 @@ To run this application locally, you can do the following:
      - dozzle is a log viewer for docker containers. Refer to https://dozzle.dev/ if you would like to learn more about it.
 
 
+# Demo 
+https://app-bookstore.azurewebsites.net/
