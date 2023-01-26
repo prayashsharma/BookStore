@@ -16,6 +16,3 @@ To run this application locally, you can do the following:
   - Backend is available at  http://localhost:3001/swagger
   - Dozzle is available at http://localhost:8888/
      - dozzle is a log viewer for docker containers. Refer to https://dozzle.dev/ if you would like to learn more about it.
-
-
-
